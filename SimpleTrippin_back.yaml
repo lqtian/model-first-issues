@@ -4,7 +4,7 @@ api:
   version:
     current: 1.0.0
   description: "TripPin is a fictional reference service demonstrating the capabilities of OData v4."
-  namespace: "Microsoft.OData.SampleService.Models.TripPin"
+  namespace: "Microsoft.OData.Service.Sample.TrippinInMemory.Models"
   host: services.odata.org
   basePath: /TripPinRESTierService
   termsOfService: http://swagger.io/terms/
@@ -24,8 +24,8 @@ root:
     type: Person[]
     searchable: true
     insertable: true
-    disallowNavigation: Friends
-    disallowInsert: [Trips, Friends]
+    disallowNavigation: Features
+    disallowInsert: [Trips, Features]
   - name: Airlines
     type: Airline[]
     concurrencyProperties: Name
@@ -38,8 +38,6 @@ root:
     deletable: false
   - name: Me
     type: Person
-  - name: GetPersonWithMostFriends
-    returns: Person
   - name: GetNearestAirport
     params:
       - name: lat
@@ -84,10 +82,6 @@ types:
     optionalProperties:
       - name: Loc
         type: edm.geographyPoint
-  - name: EventLocation
-    baseType: Location
-    optionalProperties:
-      - BuildingInfo  
   - name: Person
     key:
       - name: UserName
@@ -112,19 +106,12 @@ types:
         type: Feature
       - name: Features
         type: Feature[]
-      - name: Friends
-        type: Person[]
-      - name: BestFriend
-        type: Person
       - name: Trips
         type: Trip[]
         containsTarget: true
     operations:
       - name: GetFavoriteAirline
         returns: Airline
-      - name: GetFriendsTrips
-        params: userName
-        returns: bool
       - name: UpdatePersonLastName
         params:
           - lastName
@@ -161,44 +148,6 @@ types:
         type: duration
     optionalProperties:
       - ConfirmationCode
-  - name: PublicTransportation
-    baseType: PlanItem
-    optionalProperties:
-      - SeatNumber
-  - name: Flight
-    baseType: PublicTransportation
-    optionalProperties:
-      - FlightNumber
-      - name: Airline
-        type: Airline
-      - name: From
-        type: Airport
-      - name: To
-        type: Airport
-  - name: Employee
-    baseType: Person
-    requiredProperties:
-      - name: Cost
-        type: int64
-    optionalProperties:
-      - name: Peers
-        type: Person[]
-  - name: Manager
-    baseType: Person
-    requiredProperties:
-      - name: Budget
-        type: int64
-    optionalProperties:
-      - name: BossOffice
-        type: Location
-      - name: DirectReports
-        type: Person[]
-  - name: Event
-    baseType: PlanItem
-    optionalProperties:
-      - name: OccursAt
-        type: EventLocation
-      - Description
   - name: Trip
     key: 
       - name: TripId
